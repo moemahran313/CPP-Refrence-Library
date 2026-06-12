@@ -26,6 +26,7 @@ function getGeminiClient(): GoogleGenAI {
 // Robust retry utility for handling transient 503/429/UNAVAILABLE/RESOURCE_EXHAUSTED high-demand or quota errors
 async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries = 5, baseDelayMs = 2000) {
   let lastError: any = null;
+  // Use a stable, widely available model
   const originalModel = payload.model || "gemini-3.1-flash-lite";
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -43,26 +44,18 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
         errorMsg.includes("UNAVAILABLE") || 
         errorMsg.includes("high demand") || 
         errorMsg.includes("429") ||
-        errorMsg.includes("RESOURCE_EXHAUSTED") ||
-        errorMsg.includes("quota") ||
-        errorMsg.includes("Quota") ||
         error?.status === "UNAVAILABLE" ||
-        error?.status === "RESOURCE_EXHAUSTED" ||
-        (error?.code && (String(error.code) === "503" || String(error.code) === "429"));
+        error?.status === "RESOURCE_EXHAUSTED";
 
-      // Rotate models to bypass quota limits or transient unavailability immediately on retry!
+      // Simple, robust fallback strategy
       if (isUnavailableOrRateLimited && attempt < maxRetries) {
-        if (payload.model === "gemini-3.1-flash-lite") {
-          console.warn(`[Gemini Sandbox Fallback] Switching to gemini-3.1-flash-lite-preview-02-15...`);
-          payload.model = "gemini-3.1-flash-lite-preview-02-15";
-        } else {
-          console.warn(`[Gemini Sandbox Fallback] Resetting to gemini-3.1-flash-lite...`);
+        if (payload.model !== "gemini-3.1-flash-lite") {
+          console.warn(`[Gemini Sandbox Fallback] Switching to gemini-3.1-flash-lite...`);
           payload.model = "gemini-3.1-flash-lite";
         }
       }
 
       if (attempt < maxRetries) {
-        // Exponential backoff with random jitter to avoid thundering herd problem
         const jitter = 0.9 + Math.random() * 0.2;
         const delay = Math.round(baseDelayMs * Math.pow(2.2, attempt - 1) * jitter);
         console.warn(`[Gemini Sandbox Retry] Backing off. Retrying in ${delay}ms...`);
@@ -71,7 +64,6 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
     }
   }
   
-  // Restore original model in case payload gets reused across requests
   payload.model = originalModel;
   throw lastError;
 }
