@@ -103,6 +103,11 @@ export default function Curriculum() {
                       <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{section.title}</h3>
                       <div className="max-w-none text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
                         <MarkdownRenderer content={section.content} />
+                        {section.image && (
+                          <div className="mt-8">
+                             <img src={section.image} alt={section.title} className="w-full rounded-2xl shadow-md" />
+                          </div>
+                        )}
                       </div>
 
                       {section.code && (

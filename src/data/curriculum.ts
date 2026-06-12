@@ -3,6 +3,7 @@ export interface CurriculumSection {
   content: string;
   code?: string;
   trick?: string;
+  image?: string;
 }
 
 export interface CurriculumTopic {
@@ -40,6 +41,16 @@ int x = 5; // You can also put comments at the end of a line
    multi-line comment.
    It spans multiple lines! */
 int y = 10;`
+      },
+      {
+        title: "Visual Memory: Computer Components",
+        content: "A block diagram of the basic components found in almost all computer architectures.",
+        image: "/src/assets/images/computer_components_diagram_1781303480154.jpg"
+      },
+      {
+        title: "Visual Memory: Compilation Process",
+        content: "A block diagram of the process of converting C++ source code into an executable machine code file.",
+        image: "/src/assets/images/compilation_process_diagram_1781303492766.jpg"
       }
     ]
   },
