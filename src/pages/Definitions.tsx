@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { DEFINITIONS } from '../data/definitions';
-import { RefreshCcw, Check, X, Brain, HelpCircle } from 'lucide-react';
+import { RefreshCcw, Check, X, Brain, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { clsx } from 'clsx';
+import { useLocation } from 'react-router-dom';
 
 function QuickQuizModal({ card, onClose }: { card: typeof DEFINITIONS[0], onClose: () => void }) {
   const [options, setOptions] = useState<string[]>([]);
@@ -84,28 +85,60 @@ function QuickQuizModal({ card, onClose }: { card: typeof DEFINITIONS[0], onClos
 }
 
 export default function Definitions() {
+  const location = useLocation();
   const [learningQueue, setLearningQueue] = useState([...DEFINITIONS]);
   const [knownList, setKnownList] = useState<typeof DEFINITIONS>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
 
-  // Take the first card from the learning queue
-  const activeCard = learningQueue[0];
+  // Take the active card from the learning queue based on activeIdx
+  const activeCard = learningQueue[activeIdx] || learningQueue[0];
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const termParam = queryParams.get('term');
+    if (termParam) {
+      setLearningQueue(currentQueue => {
+        const qIdx = currentQueue.findIndex(d => d.term.toLowerCase() === termParam.toLowerCase());
+        if (qIdx !== -1) {
+          setActiveIdx(qIdx);
+          setIsFlipped(false);
+          return currentQueue;
+        } else {
+          const dIdx = DEFINITIONS.findIndex(d => d.term.toLowerCase() === termParam.toLowerCase());
+          if (dIdx !== -1) {
+            const card = DEFINITIONS[dIdx];
+            const remaining = DEFINITIONS.filter(d => d.term.toLowerCase() !== termParam.toLowerCase());
+            setActiveIdx(0);
+            setIsFlipped(false);
+            return [card, ...remaining];
+          }
+        }
+        return currentQueue;
+      });
+    }
+  }, [location.search]);
 
   const handleMark = (isKnown: boolean) => {
     setIsFlipped(false);
     
     // Tiny delay to let the flip animation start before swapping content
     setTimeout(() => {
-      const card = learningQueue[0];
-      const newQueue = learningQueue.slice(1);
+      const card = learningQueue[activeIdx];
+      if (!card) return;
+      
+      const newQueue = learningQueue.filter((_, idx) => idx !== activeIdx);
       
       if (isKnown) {
         setKnownList([...knownList, card]);
         setLearningQueue(newQueue);
+        setActiveIdx(prev => Math.min(prev, Math.max(0, newQueue.length - 1)));
       } else {
         // Needs review: push it to the end of the queue
-        setLearningQueue([...newQueue, card]);
+        const updatedQueue = [...newQueue, card];
+        setLearningQueue(updatedQueue);
+        setActiveIdx(prev => Math.min(prev, Math.max(0, updatedQueue.length - 1)));
       }
     }, 150);
   };
@@ -114,6 +147,7 @@ export default function Definitions() {
     setLearningQueue([...DEFINITIONS].sort(() => Math.random() - 0.5));
     setKnownList([]);
     setIsFlipped(false);
+    setActiveIdx(0);
   };
 
   const progress = (knownList.length / DEFINITIONS.length) * 100;
@@ -143,6 +177,75 @@ export default function Definitions() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center">
+        {/* Card Navigation Controls */}
+        {learningQueue.length > 0 && (
+          <div className="w-full max-w-2xl px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl mb-8 shadow-sm">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setIsFlipped(false);
+                  setTimeout(() => {
+                    setActiveIdx(prev => Math.max(0, prev - 1));
+                  }, 100);
+                }}
+                disabled={activeIdx === 0}
+                className={clsx(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer font-bold text-xs font-mono select-none",
+                  activeIdx === 0
+                    ? "border-transparent text-slate-300 dark:text-slate-705 cursor-not-allowed"
+                    : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-950 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 active:scale-95"
+                )}
+              >
+                <ChevronLeft size={14} /> Prev
+              </button>
+              
+              <div className="text-xs font-mono font-bold text-slate-600 dark:text-slate-400 px-2.5 py-1 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-850 rounded-lg">
+                <span className="text-blue-600 dark:text-blue-400">{activeIdx + 1}</span> <span className="text-slate-300">/</span> {learningQueue.length}
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsFlipped(false);
+                  setTimeout(() => {
+                    setActiveIdx(prev => Math.min(learningQueue.length - 1, prev + 1));
+                  }, 100);
+                }}
+                disabled={activeIdx === learningQueue.length - 1}
+                className={clsx(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer font-bold text-xs font-mono select-none",
+                  activeIdx === learningQueue.length - 1
+                    ? "border-transparent text-slate-300 dark:text-slate-705 cursor-not-allowed"
+                    : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-950 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 active:scale-95"
+                )}
+              >
+                Next <ChevronRight size={14} />
+              </button>
+            </div>
+
+            {/* Jump Selector */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold font-mono text-slate-400">Quick Jump:</span>
+              <select
+                value={activeIdx}
+                onChange={(e) => {
+                  setIsFlipped(false);
+                  const val = parseInt(e.target.value, 10);
+                  setTimeout(() => {
+                    setActiveIdx(val);
+                  }, 100);
+                }}
+                className="text-xs font-sans font-semibold bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-305 px-3 py-1.5 rounded-xl outline-none focus:ring-1 focus:ring-blue-500 max-w-[220px]"
+              >
+                {learningQueue.map((item, idx) => (
+                  <option key={idx} value={idx}>
+                    {idx + 1}. {item.term}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
         <AnimatePresence mode="wait">
           {learningQueue.length > 0 ? (
             <motion.div 

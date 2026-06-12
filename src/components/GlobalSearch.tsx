@@ -43,14 +43,14 @@ export default function GlobalSearch() {
     // Search Definitions
     DEFINITIONS.forEach(d => {
       if (d.term.toLowerCase().includes(q) || d.definition.toLowerCase().includes(q)) {
-        results.push({ type: 'Definition', title: d.term, icon: BookOpen, path: '/',  color: 'text-emerald-500', bg: 'bg-emerald-50' });
+        results.push({ type: 'Definition', title: d.term, icon: BookOpen, path: `/?term=${encodeURIComponent(d.term)}`,  color: 'text-emerald-500', bg: 'bg-emerald-50' });
       }
     });
     
     // Search MCQs
     MCQS.forEach((m) => {
       if (m.trick.toLowerCase().includes(q) || m.question.toLowerCase().includes(q)) {
-        results.push({ type: 'MCQ Trick', title: m.trick.substring(0, 60) + '...', icon: Brain, path: '/mcq', color: 'text-amber-500', bg: 'bg-amber-50' });
+        results.push({ type: 'MCQ Trick', title: m.trick.substring(0, 60) + '...', icon: Brain, path: `/mcq?q=${encodeURIComponent(m.trick)}`, color: 'text-amber-500', bg: 'bg-amber-50' });
       }
     });
 

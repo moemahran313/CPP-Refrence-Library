@@ -1,27 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MCQS } from '../data/mcq';
-import { AlertCircle, CheckCircle2, ChevronRight } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ChevronRight, ChevronLeft, HelpCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'motion/react';
 import MarkdownRenderer from '../components/MarkdownRenderer';
+import { useLocation } from 'react-router-dom';
 
 export default function MCQ() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showExplanation, setShowExplanation] = useState(false);
+  const [answeredStates, setAnsweredStates] = useState<Record<number, { selectedOption: number | null, showExplanation: boolean }>>({});
+  const location = useLocation();
 
   const currentQ = MCQS[currentIndex];
+  const currentState = answeredStates[currentIndex] || { selectedOption: null, showExplanation: false };
+  const selectedOption = currentState.selectedOption;
+  const showExplanation = currentState.showExplanation;
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const qParam = queryParams.get('q');
+    const indexParam = queryParams.get('index');
+    
+    if (indexParam !== null) {
+      const idx = parseInt(indexParam, 10);
+      if (idx >= 0 && idx < MCQS.length) {
+        setCurrentIndex(idx);
+      }
+    } else if (qParam) {
+      const matchedIndex = MCQS.findIndex(m => m.trick.toLowerCase().includes(qParam.toLowerCase()) || m.question.toLowerCase().includes(qParam.toLowerCase()));
+      if (matchedIndex !== -1) {
+        setCurrentIndex(matchedIndex);
+      }
+    }
+  }, [location.search]);
 
   const handleSelect = (index: number) => {
     if (showExplanation) return;
-    setSelectedOption(index);
-    setShowExplanation(true);
+    setAnsweredStates(prev => ({
+      ...prev,
+      [currentIndex]: { selectedOption: index, showExplanation: true }
+    }));
   };
 
   const handleNext = () => {
-    setSelectedOption(null);
-    setShowExplanation(false);
     setCurrentIndex((prev) => Math.min(prev + 1, MCQS.length - 1));
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleRevealTrick = () => {
+    setAnsweredStates(prev => ({
+      ...prev,
+      [currentIndex]: { selectedOption: null, showExplanation: true }
+    }));
+  };
+
+  const handleResetQuestion = () => {
+    setAnsweredStates(prev => {
+      const updated = { ...prev };
+      delete updated[currentIndex];
+      return updated;
+    });
   };
 
   const isLast = currentIndex === MCQS.length - 1;
@@ -112,26 +153,105 @@ export default function MCQ() {
             )}
           </AnimatePresence>
 
-          {showExplanation && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-8 flex justify-end"
-            >
+          {/* Interactive Pagination and Switch Controls */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <button
-                onClick={handleNext}
-                disabled={isLast}
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
                 className={clsx(
-                  "flex items-center gap-2 px-6 py-3 rounded-full font-bold shadow-sm transition-all cursor-pointer",
-                  isLast 
-                    ? "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed" 
-                    : "bg-slate-900 dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 active:scale-95 hover:shadow-md"
+                  "flex items-center gap-1 px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer font-mono select-none",
+                  currentIndex === 0
+                    ? "border-transparent text-slate-300 dark:text-slate-700 cursor-not-allowed"
+                    : "border-slate-200 dark:border-slate-850 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
                 )}
               >
-                {isLast ? "Completed" : "Next Question"} <ChevronRight size={18} />
+                <ChevronLeft size={14} /> Prev
               </button>
-            </motion.div>
-          )}
+
+              {/* Display surrounding pagination items */}
+              {Array.from({ length: MCQS.length }, (_, i) => i)
+                .filter(i => Math.abs(i - currentIndex) <= 2)
+                .map(i => {
+                  const isCurrent = i === currentIndex;
+                  const isAnswered = answeredStates[i] !== undefined;
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentIndex(i)}
+                      className={clsx(
+                        "w-8 h-8 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center justify-center border",
+                        isCurrent
+                          ? "bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20"
+                          : isAnswered
+                            ? "bg-green-100/50 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-900 text-emerald-600 dark:text-emerald-400"
+                            : "bg-white dark:bg-slate-900 border-slate-250 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600"
+                      )}
+                    >
+                      {i + 1}
+                    </button>
+                  );
+                })}
+
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === MCQS.length - 1}
+                className={clsx(
+                  "flex items-center gap-1 px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer font-mono select-none",
+                  currentIndex === MCQS.length - 1
+                    ? "border-transparent text-slate-300 dark:text-slate-700 cursor-not-allowed"
+                    : "border-slate-200 dark:border-slate-850 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
+                )}
+              >
+                Next <ChevronRight size={14} />
+              </button>
+            </div>
+
+            {/* Quick jump input and manual trigger */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] font-bold font-mono text-slate-400">Jump Q:</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={MCQS.length}
+                  value={currentIndex + 1}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10);
+                    if (val >= 1 && val <= MCQS.length) {
+                      setCurrentIndex(val - 1);
+                    }
+                  }}
+                  className="w-14 h-8 px-1 text-center font-mono font-bold text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <button
+                onClick={handleRevealTrick}
+                disabled={showExplanation}
+                className={clsx(
+                  "px-3 py-1.5 text-xs font-extrabold rounded-xl border transition-all cursor-pointer flex items-center gap-1 select-none font-mono",
+                  showExplanation
+                    ? "border-transparent text-slate-300 dark:text-slate-700 cursor-not-allowed"
+                    : "border-amber-300 bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-950/40 active:scale-95"
+                )}
+              >
+                <HelpCircle size={13} className="text-amber-500" /> Reveal Trick
+              </button>
+
+              {showExplanation && (
+                <button
+                  type="button"
+                  onClick={handleResetQuestion}
+                  className="px-3 py-1.5 text-xs font-bold rounded-xl border border-red-200 dark:border-red-950 bg-red-50 dark:bg-red-950/20 text-red-650 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/40 cursor-pointer active:scale-95 transition-all select-none font-mono"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

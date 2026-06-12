@@ -464,7 +464,7 @@ export default function Exams() {
                                   : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900'
                             }`}
                           >
-                            <span>{option}</span>
+                            <MarkdownRenderer content={option} className="text-sm font-bold inline-block" />
                             {showQuizDetails && oIdx === selectedExam.questions[quizStartIndex].correctAnswer && (
                               <CheckCircle2 size={16} className="text-green-500" />
                             )}
