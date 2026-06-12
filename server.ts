@@ -86,8 +86,14 @@ async function startServer() {
   // Middleware to parse json requests
   app.use(express.json());
 
+  // Health check for troubleshooting connectivity
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", env: process.env.NODE_ENV });
+  });
+
   // API endpoint for simulating compilation and execution of C++ source strings
   app.post("/api/simulate-cpp", async (req, res) => {
+    console.log("[Simulation Engine] Received request for C++ execution.");
     try {
       const { code, stdin } = req.body;
 
@@ -139,7 +145,7 @@ You MUST mentally trace the execution of the C++ code main() function step-by-st
      - Inspect your "Available Inputs" queue for the next value.
      - **CASE 1: If there IS an input value available in the queue**:
        - Consume it (remove it from the queue).
-       - Append that consumed value directly to TERMINAL_OUTPUT, followed immediately by a newline (\\n) representing the user pressing the "Enter" key on their keyboard.
+       - Append that consumed value directly to TERMINAL_OUTPUT, followed immediately by a newline (\n) representing the user pressing the "Enter" key on their keyboard.
        - Assign that value to 'x' in your simulated program state, and continue executing the next statements.
      - **CASE 2: If the queue is EMPTY / exhausted (NO input available)**:
        - **YOU MUST STOP AND HALT ALL PROGRAM SIMULATION IMMEDIATELY.**
@@ -253,15 +259,34 @@ Diagnostics:
 Your final output response must consist ONLY of the markdown layout containing \`### [TERMINAL_OUTPUT]\` and \`### [COMPILER_LOGS]\`, exactly as shown in the examples.`;
 
       const response = await generateWithRetry(client, {
-        model: "gemini-3.1-flash-lite",
+        model: "gemini-3.5-flash",
         contents: promptPayload,
         config: {
           systemInstruction: systemInstruction,
-          temperature: 0.1, // High determinism for execution code outputs
+          temperature: 0.1,
         }
       });
 
-      const text = response.text || "";
+      // Defensive text extraction
+      let text = "";
+      try {
+        text = response.text || "";
+      } catch (err) {
+        console.error("[Gemini Sandbox] Failed to extract text from response:", err);
+        // If it throws, check if we have any candidate text parts manually
+        if (response.candidates?.[0]?.content?.parts) {
+          text = response.candidates[0].content.parts.map((p: any) => p.text || "").join("");
+        }
+      }
+      
+      if (!text) {
+        console.warn("[Gemini Sandbox] Model returned empty response or was filtered.");
+        res.status(500).json({
+          error: "Empty Response",
+          message: "The execution engine returned no output. This might be due to safety filters or a transient error."
+        });
+        return;
+      }
 
       // Parse the output blocks
       let terminalOutput = "";

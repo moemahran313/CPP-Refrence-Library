@@ -418,9 +418,22 @@ export default function Playground() {
         body: JSON.stringify({ code: currentCode, stdin: stdinString }),
       });
 
+      const contentType = response.headers.get("content-type");
+      const isJson = contentType && contentType.includes("application/json");
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to contact compilation endpoint.");
+        if (isJson) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || errorData.error || "Failed to contact compilation endpoint.");
+        } else {
+          const text = await response.text();
+          throw new Error(`Server Error (${response.status}): ${text.substring(0, 100)}${text.length > 100 ? '...' : ''}`);
+        }
+      }
+
+      if (!isJson) {
+        const text = await response.text();
+        throw new Error(`Unexpected non-JSON response: ${text.substring(0, 100)}...`);
       }
 
       const data = await response.json();
@@ -626,7 +639,7 @@ export default function Playground() {
               padding={10}
               style={{
                 fontFamily: '"Fira Code", "JetBrains Mono", "SF Mono", monospace',
-                fontSize: 14,
+                fontSize: window.innerWidth < 768 ? 12 : 14,
                 backgroundColor: 'transparent',
                 outline: 'none',
               }}
