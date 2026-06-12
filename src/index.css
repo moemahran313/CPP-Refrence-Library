@@ -1,2 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Code", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-slate-150: #eef2f6;
+  --color-slate-850: #1a2333;
+  --color-slate-905: #0a0f1a;
+}
+
+@layer base {
+  body {
+    @apply antialiased font-sans transition-colors duration-200;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}

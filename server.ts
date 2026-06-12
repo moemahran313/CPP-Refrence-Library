@@ -24,9 +24,9 @@ function getGeminiClient(): GoogleGenAI {
 }
 
 // Robust retry utility for handling transient 503/429/UNAVAILABLE/RESOURCE_EXHAUSTED high-demand or quota errors
-async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries = 5, baseDelayMs = 1500) {
+async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries = 5, baseDelayMs = 2000) {
   let lastError: any = null;
-  const originalModel = payload.model || "gemini-3.1-flash-lite";
+  const originalModel = payload.model || "gemini-flash-latest";
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -52,22 +52,22 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
 
       // Rotate models to bypass quota limits or transient unavailability immediately on retry!
       if (isUnavailableOrRateLimited && attempt < maxRetries) {
-        if (payload.model === "gemini-3.5-flash") {
-          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on gemini-3.5-flash. Switching to gemini-3.1-flash-lite...`);
+        if (payload.model === "gemini-flash-latest") {
+          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on gemini-flash-latest. Switching to gemini-3.1-flash-lite...`);
           payload.model = "gemini-3.1-flash-lite";
         } else if (payload.model === "gemini-3.1-flash-lite") {
-          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on gemini-3.1-flash-lite. Switching to gemini-flash-latest...`);
-          payload.model = "gemini-flash-latest";
+          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on gemini-3.1-flash-lite. Switching to gemini-1.5-flash...`);
+          payload.model = "gemini-1.5-flash"; 
         } else {
-          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on ${payload.model}. Switching to gemini-3.5-flash...`);
-          payload.model = "gemini-3.5-flash";
+          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on ${payload.model}. Switching to gemini-flash-latest...`);
+          payload.model = "gemini-flash-latest";
         }
       }
 
       if (attempt < maxRetries) {
         // Exponential backoff with random jitter to avoid thundering herd problem
-        const jitter = 0.85 + Math.random() * 0.3;
-        const delay = Math.round(baseDelayMs * Math.pow(2, attempt - 1) * jitter);
+        const jitter = 0.9 + Math.random() * 0.2;
+        const delay = Math.round(baseDelayMs * Math.pow(2.2, attempt - 1) * jitter);
         console.warn(`[Gemini Sandbox Retry] Backing off. Retrying in ${delay}ms...`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
@@ -259,7 +259,7 @@ Diagnostics:
 Your final output response must consist ONLY of the markdown layout containing \`### [TERMINAL_OUTPUT]\` and \`### [COMPILER_LOGS]\`, exactly as shown in the examples.`;
 
       const response = await generateWithRetry(client, {
-        model: "gemini-3.5-flash",
+        model: "gemini-flash-latest",
         contents: promptPayload,
         config: {
           systemInstruction: systemInstruction,

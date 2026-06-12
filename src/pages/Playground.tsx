@@ -552,7 +552,7 @@ export default function Playground() {
             <Terminal size={18} />
             <span className="font-bold uppercase tracking-widest text-xs">Simulated Sandbox</span>
           </div>
-          <h1 className="text-3xl font-black text-slate-150 dark:text-white tracking-tight">C++ Interactive Compiler</h1>
+          <h1 className="text-3xl font-black text-slate-100 dark:text-white tracking-tight">C++ Interactive Compiler</h1>
           <p className="text-slate-400 text-sm mt-1">
             Accepts raw program designs. Prompts and handles input interactively downstream <code className="bg-slate-800 px-1 py-0.5 rounded font-mono text-xs">cin &gt;&gt;</code> directly inside the terminal console like Programiz.
           </p>
