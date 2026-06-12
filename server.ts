@@ -26,7 +26,7 @@ function getGeminiClient(): GoogleGenAI {
 // Robust retry utility for handling transient 503/429/UNAVAILABLE/RESOURCE_EXHAUSTED high-demand or quota errors
 async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries = 5, baseDelayMs = 2000) {
   let lastError: any = null;
-  const originalModel = payload.model || "gemini-flash-latest";
+  const originalModel = payload.model || "gemini-1.5-flash";
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -52,12 +52,12 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
 
       // Rotate models to bypass quota limits or transient unavailability immediately on retry!
       if (isUnavailableOrRateLimited && attempt < maxRetries) {
-        if (payload.model === "gemini-flash-latest") {
-          console.warn(`[Gemini Sandbox Fallback] Switching to gemini-3.1-flash-lite...`);
-          payload.model = "gemini-3.1-flash-lite";
+        if (payload.model === "gemini-1.5-flash") {
+          console.warn(`[Gemini Sandbox Fallback] Switching to gemini-1.5-pro...`);
+          payload.model = "gemini-1.5-pro";
         } else {
-          console.warn(`[Gemini Sandbox Fallback] Resetting to gemini-flash-latest...`);
-          payload.model = "gemini-flash-latest";
+          console.warn(`[Gemini Sandbox Fallback] Resetting to gemini-1.5-flash...`);
+          payload.model = "gemini-1.5-flash";
         }
       }
 
@@ -262,7 +262,7 @@ Diagnostics:
 Your final output response must consist ONLY of the markdown layout containing \`### [TERMINAL_OUTPUT]\` and \`### [COMPILER_LOGS]\`, exactly as shown in the examples.`;
 
       const response = await generateWithRetry(client, {
-        model: "gemini-flash-latest",
+        model: "gemini-1.5-flash",
         contents: promptPayload,
         config: {
           systemInstruction: systemInstruction,
