@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { EXAMS_DATA, Exam, ExamQuestion } from '../data/exams';
 import { 
   GraduationCap, Award, HelpCircle, Lightbulb, Play, ArrowRight, Code, 
@@ -11,8 +11,30 @@ import MarkdownRenderer from '../components/MarkdownRenderer';
 
 export default function Exams() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<'pareto' | 'exams'>('exams');
   const [selectedExamId, setSelectedExamId] = useState<string>(EXAMS_DATA[0].id);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const examId = params.get('id');
+    if (examId) {
+      const exists = EXAMS_DATA.some(e => e.id === examId);
+      if (exists) {
+        setSelectedExamId(examId);
+        setActiveTab('exams');
+        // Let's also trigger quiz mode if requested
+        const mode = params.get('mode');
+        if (mode === 'quiz') {
+          setQuizMode(true);
+          setQuizStartIndex(0);
+          setSelectedOption(null);
+          setShowQuizDetails(false);
+        }
+      }
+    }
+  }, [location.search]);
+
   const [quizMode, setQuizMode] = useState<boolean>(false);
   const [quizStartIndex, setQuizStartIndex] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number | boolean | null>(null);

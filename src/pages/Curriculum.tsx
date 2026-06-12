@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CURRICULUM_TOPICS } from '../data/curriculum';
 import { BookOpen, Terminal, ChevronRight } from 'lucide-react';
 import Prism from 'prismjs';
@@ -7,11 +7,24 @@ import 'prismjs/themes/prism-tomorrow.css';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'motion/react';
 import MarkdownRenderer from '../components/MarkdownRenderer';
+import { useLocation } from 'react-router-dom';
 
 export default function Curriculum() {
   const [activeTopicId, setActiveTopicId] = useState(CURRICULUM_TOPICS[0].id);
+  const location = useLocation();
 
   const activeTopic = CURRICULUM_TOPICS.find((t) => t.id === activeTopicId) || CURRICULUM_TOPICS[0];
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const topicParam = params.get('topic');
+    if (topicParam) {
+      const exists = CURRICULUM_TOPICS.some((t) => t.id === topicParam);
+      if (exists) {
+        setActiveTopicId(topicParam);
+      }
+    }
+  }, [location.search]);
 
   React.useEffect(() => {
     Prism.highlightAll();
