@@ -43,7 +43,7 @@ function AppContent() {
 
         {/* Sidebar */}
         <nav className={cn(
-          "fixed md:sticky top-0 left-0 h-full w-72 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 flex flex-col pt-6 pb-4 z-50 transition-transform duration-300 md:translate-x-0 cursor-default",
+          "fixed md:sticky top-0 left-0 h-full w-72 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 flex flex-col pt-6 pb-6 z-50 transition-transform duration-300 md:translate-x-0 cursor-default",
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}>
           <div className="px-6 mb-8 mt-2 flex items-center justify-between">
@@ -98,7 +98,7 @@ function AppContent() {
             <NavItem onClick={() => setSidebarOpen(false)} to="/number-systems" icon={<Binary size={18} />} label="Number Systems" />
           </div>
           
-          <div className="px-6 mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="px-6 mt-auto pt-4 pb-4 border-t border-slate-100 dark:border-slate-800">
             <div className="text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500 mb-1">v1.2.0</div>
             <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
               by <span className="font-bold text-slate-800 dark:text-slate-300">Muhammad Mahran</span>
