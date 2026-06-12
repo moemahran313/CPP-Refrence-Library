@@ -166,9 +166,9 @@ export default function Dashboard() {
       {/* Dynamic Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 font-mono">Modern Academy Hub</span>
-          <h1 className="text-3xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mt-1">C++ Reference Hub</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">
+          <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 font-mono">Modern Academy Hub</span>
+          <h1 className="text-2xl sm:text-3xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mt-1">C++ Reference Hub</h1>
+          <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2 font-medium">
             Explore authentic academic tools, source templates, and solutions. No fake progress, only high-fidelity interactive training modules.
           </p>
         </div>

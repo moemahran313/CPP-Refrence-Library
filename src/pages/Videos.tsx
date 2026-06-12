@@ -127,15 +127,15 @@ export default function Videos() {
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-200/50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-bold uppercase tracking-widest mb-4 shadow-sm">
                     {activeCategory.instructor} • {activeCategory.title}
                   </div>
-                  <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-4">{activeVideo.title}</h1>
-                  <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-3xl">
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-4 leading-tight">{activeVideo.title}</h1>
+                  <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-3xl">
                      {activeVideo.source === 'youtube' 
                        ? "Official university YouTube playlist. Expand to fullscreen for the best experience."
                        : "Comprehensive supplementary material from Google Drive. Ensure you are signed in for access if prompted."}
                   </p>
                 </div>
 
-                <div className="flex-1 bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden relative min-h-[400px]">
+                <div className="aspect-video w-full bg-slate-900 rounded-xl md:rounded-3xl shadow-2xl border border-slate-800 overflow-hidden relative">
                   <iframe 
                     src={activeVideo.url} 
                     className="absolute inset-0 w-full h-full border-0"

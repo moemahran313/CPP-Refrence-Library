@@ -88,7 +88,7 @@ export default function Curriculum() {
               className="flex-1 flex flex-col"
             >
               <div className="mb-10">
-                <h1 className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4 leading-tight">
                   {activeTopic.title}
                 </h1>
                 <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed">

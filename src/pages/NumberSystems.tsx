@@ -15,8 +15,8 @@ export default function NumberSystems() {
   return (
     <div className="p-4 md:p-12 max-w-6xl mx-auto min-h-[calc(100vh-4rem)]">
       <div className="mb-12">
-        <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">{NUMBER_SYSTEMS_GUIDE.title}</h2>
-        <p className="text-slate-500 dark:text-slate-400 mt-3 text-lg leading-relaxed max-w-3xl">{NUMBER_SYSTEMS_GUIDE.description}</p>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">{NUMBER_SYSTEMS_GUIDE.title}</h2>
+        <p className="text-sm md:text-lg text-slate-500 dark:text-slate-400 mt-3 leading-relaxed max-w-3xl">{NUMBER_SYSTEMS_GUIDE.description}</p>
       </div>
 
       <div className="flex bg-slate-100 dark:bg-slate-900 p-1.5 rounded-full mb-12 inline-flex relative shadow-inner w-full sm:w-auto">
