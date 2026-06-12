@@ -53,14 +53,13 @@ export default function Videos() {
               const isActive = activeVideo.id === vid.id;
               return (
                 <motion.button
-                  layout
                   key={vid.id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => setActiveVideo(vid)}
                   className={clsx(
-                    "w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors",
+                    "w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors border-none outline-none",
                     isActive ? "bg-slate-900 dark:bg-slate-800 text-white" : "hover:bg-slate-100 dark:hover:bg-slate-800/50 text-slate-600 dark:text-slate-300"
                   )}
                 >

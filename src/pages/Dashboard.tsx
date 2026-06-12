@@ -182,7 +182,7 @@ export default function Dashboard() {
       </div>
 
       {/* Dynamic Integrity Counter Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Syllabus Sections", value: totalSections, phrase: `${totalTopics} Core Chapters`, icon: BookOpen, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/20", border: "border-purple-100 dark:border-purple-900/30" },
           { label: "Compiler Presets", value: sandboxPresets.length, phrase: "Syntactical Code Blocks", icon: Terminal, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/20", border: "border-blue-100 dark:border-blue-900/30" },
@@ -206,10 +206,10 @@ export default function Dashboard() {
       </div>
 
       {/* Bento-style Grid of Actual Library Tools */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
         
         {/* Card 1: C++ Compiler Sandbox Preset Launcher (3 Cols Wide) */}
-        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
+        <div className="md:col-span-2 lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
@@ -259,7 +259,7 @@ export default function Dashboard() {
         </div>
 
         {/* Card 2: Daily C++ MCQ Challenge - Answering widget directly here! (3 Cols Wide) */}
-        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
+        <div className="md:col-span-2 lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
@@ -350,7 +350,7 @@ export default function Dashboard() {
         </div>
 
         {/* Card 3: Past Exam Papers Room (2 Cols Wide) */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
+        <div className="md:col-span-1 lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
@@ -407,7 +407,7 @@ export default function Dashboard() {
         </div>
 
         {/* Card 4: Curriculum Syllabus Chapter Quick Nav (2 Cols Wide) */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
+        <div className="md:col-span-1 lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
@@ -451,7 +451,7 @@ export default function Dashboard() {
         </div>
 
         {/* Card 5: Live Number Systems Converter (2 Cols Wide) */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
+        <div className="md:col-span-1 lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">

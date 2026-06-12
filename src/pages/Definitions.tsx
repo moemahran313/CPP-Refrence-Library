@@ -273,7 +273,7 @@ export default function Definitions() {
                       <Brain size={32} />
                     </div>
                     <div className="text-sm font-bold font-mono text-blue-500 dark:text-blue-400 mb-6 uppercase tracking-[0.2em] bg-blue-50 dark:bg-blue-950/40 px-4 py-1.5 rounded-full">Concept</div>
-                    <h3 className="text-5xl font-black text-slate-900 dark:text-white text-center tracking-tight leading-tight">{activeCard.term}</h3>
+                    <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white text-center tracking-tight leading-tight">{activeCard.term}</h3>
                     <div className="absolute bottom-8 text-slate-400 dark:text-slate-500 flex items-center gap-2 text-sm font-medium">
                       <RefreshCcw size={16} className="animate-spin-slow opacity-50" /> Tap anywhere to flip
                     </div>

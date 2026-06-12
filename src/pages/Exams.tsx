@@ -295,7 +295,7 @@ export default function Exams() {
               ))}
             </div>
 
-            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-slate-600 dark:text-slate-300">
+            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-slate-600 dark:text-slate-300">
               <div>
                 <span className="text-slate-400 uppercase font-bold tracking-wider text-[10px] block">Course:</span>
                 <span className="font-semibold text-slate-900 dark:text-white text-base leading-tight">{selectedExam.course}</span>

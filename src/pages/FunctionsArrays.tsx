@@ -204,8 +204,24 @@ export default function FunctionsArrays() {
       </div>
 
       {/* Main Content Viewer Area */}
-      <div className="flex-1 bg-slate-50/50 dark:bg-slate-950/20 overflow-y-auto p-4 md:p-8 flex flex-col gap-8">
+      <div className="flex-1 bg-slate-50/50 dark:bg-slate-950/20 overflow-y-auto p-4 lg:p-8 flex flex-col gap-8">
         
+        {/* Mobile Nav */}
+        <div className="lg:hidden mb-2">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 block">Module Selection</label>
+          <select
+            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+            value={activeId}
+            onChange={(e) => updateActiveFunction(e.target.value)}
+          >
+            {FUNCTIONS_ARRAYS.map((func) => (
+              <option key={func.id} value={func.id}>
+                {func.title}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* Toggle Nav */}
         <div className="flex bg-slate-200/50 dark:bg-slate-800/60 p-1 rounded-full w-fit">
           <button

@@ -115,7 +115,7 @@ export default function MCQ() {
                   onClick={() => handleSelect(idx)}
                   disabled={isReveal}
                   className={clsx(
-                    "w-full text-left px-6 py-4 rounded-xl border-2 transition-all font-medium text-lg cursor-pointer",
+                    "w-full text-left px-6 py-4 rounded-xl border-2 transition-all font-medium text-base md:text-lg cursor-pointer",
                     btnClass
                   )}
                 >
