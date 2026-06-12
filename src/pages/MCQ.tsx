@@ -3,6 +3,7 @@ import { MCQS } from '../data/mcq';
 import { AlertCircle, CheckCircle2, ChevronRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'motion/react';
+import MarkdownRenderer from '../components/MarkdownRenderer';
 
 export default function MCQ() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,9 +44,9 @@ export default function MCQ() {
             </span>
           </div>
           
-          <h3 className="text-xl font-medium text-slate-900 dark:text-white leading-relaxed">
-            {currentQ.question}
-          </h3>
+          <div className="text-xl font-medium text-slate-900 dark:text-white leading-relaxed">
+            <MarkdownRenderer content={currentQ.question} />
+          </div>
         </div>
 
         <div className="p-8 bg-slate-50/50 dark:bg-slate-950/20">
@@ -78,8 +79,10 @@ export default function MCQ() {
                   )}
                 >
                   <div className="flex justify-between items-center">
-                    <span>{option}</span>
-                    {isReveal && isCorrect && <CheckCircle2 className="text-green-500" size={20} />}
+                    <div className="text-base select-none">
+                      <MarkdownRenderer content={option} />
+                    </div>
+                    {isReveal && isCorrect && <CheckCircle2 className="text-green-500 shrink-0 ml-4" size={20} />}
                   </div>
                 </button>
               );
@@ -95,11 +98,13 @@ export default function MCQ() {
                 className="overflow-hidden"
               >
                 <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl p-6">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <AlertCircle className="text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" size={20} />
                     <div>
                       <h4 className="font-bold text-amber-900 dark:text-amber-400 mb-1">The Trick</h4>
-                      <p className="text-amber-800 dark:text-amber-200/80 leading-relaxed">{currentQ.trick}</p>
+                      <div className="text-amber-800 dark:text-amber-200/80 leading-relaxed font-semibold">
+                        <MarkdownRenderer content={currentQ.trick} />
+                      </div>
                     </div>
                   </div>
                 </div>

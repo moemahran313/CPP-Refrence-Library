@@ -6,6 +6,7 @@ import 'prismjs/components/prism-cpp';
 import 'prismjs/themes/prism-tomorrow.css';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'motion/react';
+import MarkdownRenderer from '../components/MarkdownRenderer';
 
 export default function Curriculum() {
   const [activeTopicId, setActiveTopicId] = useState(CURRICULUM_TOPICS[0].id);
@@ -87,10 +88,8 @@ export default function Curriculum() {
                   <div key={idx} className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
                     <div className="p-6 md:p-8">
                       <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{section.title}</h3>
-                      <div className="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-4">
-                        {section.content.split('\n\n').map((para, i) => (
-                          <p key={i}>{para}</p>
-                        ))}
+                      <div className="max-w-none text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
+                        <MarkdownRenderer content={section.content} />
                       </div>
 
                       {section.code && (
@@ -109,9 +108,9 @@ export default function Curriculum() {
                           <h4 className="flex items-center gap-2 font-bold text-amber-800 dark:text-amber-500 mb-2">
                             <span className="text-xl">💡</span> Pro Tip / Trick
                           </h4>
-                          <p className="text-amber-900 dark:text-amber-200/80 leading-relaxed font-medium">
-                            {section.trick}
-                          </p>
+                          <div className="text-amber-900 dark:text-amber-200/80 leading-relaxed font-medium">
+                            <MarkdownRenderer content={section.trick} />
+                          </div>
                         </div>
                       )}
                     </div>

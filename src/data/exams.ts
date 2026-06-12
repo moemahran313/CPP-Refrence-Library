@@ -24,6 +24,410 @@ export interface Exam {
 
 export const EXAMS_DATA: Exam[] = [
   {
+    id: "2025-2026-fall",
+    year: "2025-2026",
+    semester: "Fall",
+    course: "Program Design and Computer Languages (CMP n010)",
+    duration: "2 hours",
+    professor: "Dr. Ehab Elshimy & Dr. Asim Badr Eldin",
+    questions: [
+      {
+        id: "25-26-q1-1",
+        type: "definition",
+        points: 4,
+        title: "Question 1.1: OOP Main Features",
+        questionText: "Explain the main features of Object-Oriented Programming (OOP).",
+        hint: "Think about the four pillars of OOP: encapsulation, inheritance, polymorphism, and abstraction.",
+        solution: "The four primary characteristics (pillars) of Object-Oriented Programming (OOP) are:\n\n1. **Encapsulation**:\n   The process of bundling data (attributes) and the functions (methods) that operate on that data into a single unit (a class), while restricting direct access to some of the object's components (using private access specifiers) to protect data integrity.\n\n2. **Inheritance**:\n   A mechanism that allows a new class (derived/child class) to inherit attributes and methods from an existing class (base/parent class). This promotes code reusability and builds a hierarchical relationship.\n\n3. **Polymorphism**:\n   The ability of different classes to respond to the same message (function call) in different ways. In C++, this is implemented through function overloading (compile-time) and virtual functions/overriding (runtime).\n\n4. **Abstraction**:\n   Hiding complex internal implementation details and showing only the essential features of an object. This reduces complexity and allows developers to interact with cleaner interfaces."
+      },
+      {
+        id: "25-26-q1-2",
+        type: "definition",
+        points: 3,
+        title: "Question 1.2: Types of Inheritance",
+        questionText: "Explain the types of inheritance in OOP.",
+        hint: "Recall how subclasses can relate to parent classes. Think of simple, multi-level, multiple, hierarchical, and hybrid relations.",
+        solution: "In OOP and C++, the types of inheritance include:\n\n1. **Single Inheritance**:\n   A derived class inherits from exactly **one** base class.\n   *Example*: Class `B` inherits from Class `A`.\n\n2. **Multilevel Inheritance**:\n   A derived class inherits from another derived class, forming a chain of inheritance.\n   *Example*: Class `C` inherits from Class `B`, which inherits from Class `A`.\n\n3. **Multiple Inheritance**:\n   A derived class inherits from **more than one** base class simultaneously.\n   *Example*: Class `C` inherits from both Class `A` and Class `B`.\n\n4. **Hierarchical Inheritance**:\n   Multiple derived classes inherit from a **single** shared base class.\n   *Example*: Class `B` and Class `C` both inherit from Class `A`.\n\n5. **Hybrid (Virtual) Inheritance**:\n   A combination of two or more types of inheritance. It often leads to the diamond problem (e.g., Class `D` inherits from Class `B` and Class `C`, which both inherit from Class `A`), which is resolved in C++ using `virtual` base classes."
+      },
+      {
+        id: "25-26-q1-3",
+        type: "math",
+        points: 2,
+        title: "Question 1.3: Number Systems to Decimal",
+        questionText: "Convert the following numbers to decimal numbers:\n1. $(10010101)_2$\n2. $(156)_8$",
+        hint: "Use positional values (weights) in base 2 ($2^n$) and base 8 ($8^n$).",
+        solution: "### 1. Convert $(10010101)_2$ to Decimal\nUsing weights of base 2:\n$$\n\\begin{aligned}\n(10010101)_2 &= 1 \\cdot 2^7 + 0 \\cdot 2^6 + 0 \\cdot 2^5 + 1 \\cdot 2^4 + 0 \\cdot 2^3 + 1 \\cdot 2^2 + 0 \\cdot 2^1 + 1 \\cdot 2^0 \\\\\n&= 128 + 0 + 0 + 16 + 0 + 4 + 0 + 1 \\\\\n&= \\mathbf{149}_{10}\n\\end{aligned}\n$$\n\n### 2. Convert $(156)_8$ to Decimal\nUsing weights of base 8:\n$$\n\\begin{aligned}\n(156)_8 &= 1 \\cdot 8^2 + 5 \\cdot 8^1 + 6 \\cdot 8^0 \\\\\n&= 64 + 40 + 6 \\\\\n&= \\mathbf{110}_{10}\n\\end{aligned}\n$$"
+      },
+      {
+        id: "25-26-q1-4",
+        type: "math",
+        points: 1,
+        title: "Question 1.4: Decimal to Binary",
+        questionText: "Convert the following decimal number to binary:\n- $(964)_{10}$",
+        hint: "Successively divide the number by 2 and write down the remainders from bottom to top.",
+        solution: "### Convert $(964)_{10}$ to Binary\n\nDivide by 2 repeatedly and record remainders:\n- $964 \\div 2 = 482$ with remainder **0**\n- $482 \\div 2 = 241$ with remainder **0**\n- $241 \\div 2 = 120$ with remainder **1**\n- $120 \\div 2 = 60$ with remainder **0**\n- $60 \\div 2 = 30$ with remainder **0**\n- $30 \\div 2 = 15$ with remainder **0**\n- $15 \\div 2 = 7$ with remainder **1**\n- $7 \\div 2 = 3$ with remainder **1**\n- $3 \\div 2 = 1$ with remainder **1**\n- $1 \\div 2 = 0$ with remainder **1**\n\nReading the remainders from bottom to top (MSB to LSB):\n$$\n(964)_{10} = \\mathbf{(1111000100)_2}\n$$\n\n**Verification**:\n$512 + 256 + 128 + 64 + 4 = 964_{10}$."
+      },
+      {
+        id: "25-26-q2-1",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.1: Struct Private Scope",
+        questionText: "In some cases, private elements are declared in a structure.",
+        options: ["True", "False"],
+        correctAnswer: true,
+        hint: "In C++, a struct is identical to a class except for default access level specifiers. Can you manually specify private elements?",
+        solution: "**TRUE**. In C++, a `struct` is structurally identical to a `class` except that its members default to `public` visibility. However, you can explicitly use the `private:` keyword inside a `struct` to declare private members, restricting direct access from outside."
+      },
+      {
+        id: "25-26-q2-2",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.2: Break Statement",
+        questionText: "We use a break statement to exit from a block.",
+        options: ["True", "False"],
+        correctAnswer: false,
+        hint: "Think about where 'break' is valid inside C++. Can you call it inside a standard local brace scope?",
+        solution: "**FALSE**. In C++, the `break` statement can only be used to exit from loops (`for`, `while`, `do-while`) or from a `switch` selection block. It cannot be used to exit from an ordinary block of code `{ ... }` that is not a loop or switch."
+      },
+      {
+        id: "25-26-q2-3",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.3: Switch Statement Expressions",
+        questionText: "The expression used in the switch statement may be a reference variable.",
+        options: ["True", "False"],
+        correctAnswer: true,
+        hint: "A switch expression must evaluate to an integral or enum type. If a reference references an int, does it work?",
+        solution: "**TRUE**. The expression within a `switch` statement in C++ must evaluate to an integral or enumeration type. A reference variable that refers to an integer or character type is fully allowed because the compiler automatically dereferences it to fetch its underlying value."
+      },
+      {
+        id: "25-26-q2-4",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.4: Memory Block Pointers",
+        questionText: "A pointer to a block of memory is effectively same as an array.",
+        options: ["True", "False"],
+        correctAnswer: true,
+        hint: "An array name acts as a constant pointer to the first element. Both can be indexed using the bracket symbol `[]`.",
+        solution: "**TRUE**. An array name decay-converts into a constant pointer pointing to the memory address of its first element. In C++, a pointer pointing to a contiguous block of memory can be indexed exactly like an array using bracket notation (e.g., `ptr[i]` is identical to `*(ptr + i)`)."
+      },
+      {
+        id: "25-26-q2-5",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.5: Pre-increment Mechanics",
+        questionText: "`y = ++x` means that we increase x by 1 after assign as value to y.",
+        options: ["True", "False"],
+        correctAnswer: false,
+        hint: "Is `++x` a pre-increment or post-increment? Pre-increment means increment *before* assignment.",
+        solution: "**FALSE**. `++x` is a **pre-increment** operator. It increases the value of `x` by 1 **before** assigning its value to `y`. The statement that increases `x` *after* assigning is the post-increment operator: `y = x++`."
+      },
+      {
+        id: "25-26-q2-6",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.6: Local Variable Lifetime",
+        questionText: "The scope and its life time of the variable declared in the user defined function in this function only.",
+        options: ["True", "False"],
+        correctAnswer: true,
+        hint: "Think about local variables and automatic storage duration inside C++ functions.",
+        solution: "**TRUE**. Variables declared within a user-defined function are local variables. They have **local block scope** (only visible inside that function) and **automatic lifetime** (they are created on the stack when the function is called and destroyed automatically when the function returns)."
+      },
+      {
+        id: "25-26-q2-7",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.7: Struct Declaration vs Instance",
+        questionText: "When the structure is declared it will allocate memory.",
+        options: ["True", "False"],
+        correctAnswer: false,
+        hint: "By declaring a structure, you are defining a new data blueprint. Is any physical memory allocated yet?",
+        solution: "**FALSE**. Declaring a structure simply defines a new data type or blueprint for the compiler; it does **not** allocate any physical memory. Memory is only allocated when you instantiate a variable of that structure type (e.g., `Item myItem;`)."
+      },
+      {
+        id: "25-26-q2-8",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.8: Reference Aliasing",
+        questionText: "The reference variable in C++ language provides alternate name for the variable.",
+        options: ["True", "False"],
+        correctAnswer: true,
+        hint: "What is the definition of a reference in C++?",
+        solution: "**TRUE**. In C++, a reference variable acts as a direct **alias (alternate name)** for an already existing variable, allowing you to access or modify the same underlying storage location through multiple names."
+      },
+      {
+        id: "25-26-q2-9",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.9: Volatile Storage vs Hard Disk",
+        questionText: "Hard Disk is a temporary (volatile) memory, which needs Electricity to preserve data.",
+        options: ["True", "False"],
+        correctAnswer: false,
+        hint: "Which storage retains data after powering down? Hard drive or RAM?",
+        solution: "**FALSE**. The hard disk drive (or SSD) is a **non-volatile (permanent)** secondary storage medium that retains its data even after the power is unplugged. The RAM (Random Access Memory) is the volatile memory that requires electricity to preserve data."
+      },
+      {
+        id: "25-26-q2-10",
+        type: "true-false",
+        points: 1,
+        title: "Question 2.10: Function Signatures",
+        questionText: "The function's signature is its name and parameters.",
+        options: ["True", "False"],
+        correctAnswer: true,
+        hint: "A compiler uses signature matching for overload resolution. Does it include the return type?",
+        solution: "**TRUE**. In C++, a function's signature consists of its **name** and its **parameter list** (the order, types, and number of its arguments). The return type is **not** part of the signature and cannot be used alone to overload functions."
+      },
+      {
+        id: "25-26-q3-a",
+        type: "program",
+        points: 3,
+        title: "Question 3a: Call by Reference Swap Function",
+        questionText: "Write a C++ function named `Swap` having two parameters to swap the entered parameter values. **'Using call by reference'**.",
+        hint: "Pass parameters by reference using the ampersand `&` symbol. This allows direct modifications to the caller's arguments.",
+        solution: "### Swap Function in C++ (Call by Reference)\n\nPassing by reference requires appending an ampersand (`&`) to the parameter types. This tells the compiler to pass the actual variable's memory address rather than a copy of its value.\n\nHere is the full solution code with a demonstration driver inside the main method:",
+        defaultStdin: "",
+        previewCode: `#include <iostream>
+using namespace std;
+
+// Swap function using call-by-reference
+void Swap(int &a, int &b) {
+    int temp = a;
+    a = b;
+    b = temp;
+    cout << "[Inside Swap()]: Swapped parameters!" << endl;
+}
+
+int main() {
+    int first = 42;
+    int second = 99;
+    
+    cout << "=== Testing Reference Swap ===" << endl;
+    cout << "Before swap: first = " << first << ", second = " << second << endl;
+    
+    // Call Swap - the ampersand references pass the original variables directly
+    Swap(first, second);
+    
+    cout << "After swap:  first = " << first << ", second = " << second << endl;
+    return 0;
+}`
+      },
+      {
+        id: "25-26-q3-b",
+        type: "class",
+        points: 7,
+        title: "Question 3b: Point Class OOP Design",
+        questionText: "Design a class named `Point` to represent a Point. The class contains:\n- Two integer data fields named `X` and `Y` that specify the point coordinates (**not allowed to be negative values**). The default value is `0` for both.\n- A method `move` that sets coordinates.\n- A method `print` that prints the point coordinates.",
+        hint: "Use private access specifiers for coordinates `X` and `Y`. Put validation inside the constructor and the `move` method to enforce non-negative values.",
+        solution: "### Point Class Object-Oriented Design\n\nTo prevent coordinates $X$ and $Y$ from being assigned negative values, we follow encapsulation principles by keeping them `private` and performing inspection/validation guard checks inside the initializer/constructor and the `move` modifier method.\n\nHere is the full modular class design, ready to execute:",
+        defaultStdin: "",
+        previewCode: `#include <iostream>
+using namespace std;
+
+class Point {
+private:
+    int X; // private attribute
+    int Y; // private attribute
+
+public:
+    // Default constructor (sets default values to 0)
+    Point() {
+        X = 0;
+        Y = 0;
+    }
+
+    // Method to set coordinates with negative check shielding
+    void move(int newX, int newY) {
+        if (newX >= 0) {
+            X = newX;
+        } else {
+            cout << "[Error Alert] X coordinate " << newX << " is negative! Rebuffed. X stays: " << X << endl;
+        }
+
+        if (newY >= 0) {
+            Y = newY;
+        } else {
+            cout << "[Error Alert] Y coordinate " << newY << " is negative! Rebuffed. Y stays: " << Y << endl;
+        }
+    }
+
+    // Method to print the current point coordinates
+    void print() {
+        cout << "Point Coordinates: (" << X << ", " << Y << ")" << endl;
+    }
+};
+
+int main() {
+    cout << "=== Demanding Point Constructors ===" << endl;
+    Point p1;
+    p1.print(); // Displays (0,0)
+
+    cout << "\n=== Moving to valid coordinates (12, 85) ===" << endl;
+    p1.move(12, 85);
+    p1.print(); // Displays (12,85)
+
+    cout << "\n=== Trap: Moving to illegal negative coordinates (-5, 90) ===" << endl;
+    p1.move(-5, 90);
+    p1.print(); // Displays (12,90) because translation to X=-5 was safely blocked!
+
+    return 0;
+}`
+      },
+      {
+        id: "25-26-q4",
+        type: "program",
+        points: 10,
+        title: "Question 4: Tabular Inventory Database Management System",
+        questionText: "Write a C++ program that accepts 10 items. Each item contains the following:\n- `item code` (int)\n- `item name` which includes: `name` and `altName` (struct Nested NameInfo)\n- `item price` (double)\n- `item quantity` (int)\n\nThe program displays the following menu:\n- Press (1) to fill data items.\n- Press (2) to display the price of a certain item with its name or alternative name.\n- Press (3) to display the quantity of an item with its code.\n- Press (4) to display all item data in tabular form.\n- Press (5) to exit.\n\nThen it extracts the user choice and displays its selection. This procedure will repeat until menu item number (5) is chosen.",
+        hint: "Use nested structures. Create a struct `NameInfo` representing the name components, and then nest it in an `Item` struct. Use an array of 10 items to persist database entries in memory.",
+        solution: "### Hierarchical Item Management System\n\nThis C++ program leverages nested structs, array of objects/structs, string matching operations, a persistent interactive menu `do-while` loop, and switch-case selection controls. To allow fast execution inside our compiler sandbox, you can feed a sample sequence list to the standard inputs.",
+        defaultStdin: "1\n101 Apple Golden_Apple 1.99 50\n102 Banana Yellow_Banana 0.99 120\n103 Orange Clementine 1.50 75\n104 Pear Green_Pear 2.50 30\n105 Mango Alphonso 3.99 40\n106 Strawberry Red_Berry 4.50 60\n107 Grape Purple_Grape 2.00 80\n108 Peach Sweet_Peach 2.80 45\n109 Pineapple Ananas 3.50 25\n110 Watermelon Melon 5.00 15\n2\nClementine\n3\n107\n4\n5",
+        previewCode: `#include <iostream>
+using namespace std;
+
+// Nesting: Structure for the descriptive double names
+struct NameInfo {
+    string name;
+    string altName;
+};
+
+// Primary structure representing the complex item details
+struct Item {
+    int code;
+    NameInfo itemName; // nested struct
+    double price;
+    int quantity;
+};
+
+const int MAX_ITEMS = 10;
+
+int main() {
+    Item inventory[MAX_ITEMS];
+    bool isFilled = false;
+    int choice;
+
+    do {
+        cout << "\\n=========================================" << endl;
+        cout << "      MODERN ACADEMY CRAMMER INVENTORY   " << endl;
+        cout << "=========================================" << endl;
+        cout << "Press (1) to fill data items." << endl;
+        cout << "Press (2) to display price of a certain item (by Name/AltName)." << endl;
+        cout << "Press (3) to display quantity of certain item (by Code)." << endl;
+        cout << "Press (4) to display all item data in tabular form." << endl;
+        cout << "Press (5) to exit." << endl;
+        cout << "Enter your choice (1-5): ";
+        
+        if (!(cin >> choice)) {
+            // Handle infinite invalid inputs safely
+            cin.clear();
+            string discard;
+            cin >> discard;
+            cout << "[Error] Invalid raw option choice!" << endl;
+            continue;
+        }
+
+        switch (choice) {
+            case 1: {
+                cout << "\\n--- Filling Inventory for " << MAX_ITEMS << " Items ---" << endl;
+                for (int i = 0; i < MAX_ITEMS; i++) {
+                    cout << "Item #" << (i + 1) << " Details:" << endl;
+                    cout << "   Enter Code: ";
+                    cin >> inventory[i].code;
+                    cout << "   Enter Name (no spaces): ";
+                    cin >> inventory[i].itemName.name;
+                    cout << "   Enter Alternative Name (no spaces): ";
+                    cin >> inventory[i].itemName.altName;
+                    cout << "   Enter Price: $";
+                    cin >> inventory[i].price;
+                    cout << "   Enter Quantity: ";
+                    cin >> inventory[i].quantity;
+                }
+                isFilled = true;
+                cout << "\\n[Success] Inventory populated successfully!" << endl;
+                break;
+            }
+            case 2: {
+                if (!isFilled) {
+                    cout << "[Notification] Inventory is empty! Please populate first (Option 1)." << endl;
+                    break;
+                }
+                string searchName;
+                cout << "\\nEnter target Name or Alternative Name to search price: ";
+                cin >> searchName;
+                
+                bool found = false;
+                for (int i = 0; i < MAX_ITEMS; i++) {
+                    if (inventory[i].itemName.name == searchName || inventory[i].itemName.altName == searchName) {
+                        cout << "-> MATCH FOUND! Item '" << inventory[i].itemName.name 
+                             << "' / '" << inventory[i].itemName.altName 
+                             << "' Price: $" << inventory[i].price << endl;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    cout << "[Error] Item '" << searchName << "' not found in database!" << endl;
+                }
+                break;
+            }
+            case 3: {
+                if (!isFilled) {
+                    cout << "[Notification] Inventory is empty! Please populate first (Option 1)." << endl;
+                    break;
+                }
+                int searchCode;
+                cout << "\\nEnter item code to search Quantity: ";
+                cin >> searchCode;
+                
+                bool found = false;
+                for (int i = 0; i < MAX_ITEMS; i++) {
+                    if (inventory[i].code == searchCode) {
+                        cout << "-> MATCH FOUND! Item code " << searchCode 
+                             << " ('" << inventory[i].itemName.name << "') Quantity: " 
+                             << inventory[i].quantity << " units" << endl;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    cout << "[Error] Item code " << searchCode << " not found!" << endl;
+                }
+                break;
+            }
+            case 4: {
+                if (!isFilled) {
+                    cout << "[Notification] Inventory is empty! Please populate first (Option 1)." << endl;
+                    break;
+                }
+                cout << "\\n=================================================================" << endl;
+                cout << " CODE   | NAME             | ALT NAME         | PRICE   | QUANTITY" << endl;
+                cout << "=================================================================" << endl;
+                for (int i = 0; i < MAX_ITEMS; i++) {
+                    // Simple simulated neat margins layout
+                    cout << " " << inventory[i].code << "\t| "
+                         << inventory[i].itemName.name << "\t\t| "
+                         << inventory[i].itemName.altName << "\t\t| $"
+                         << inventory[i].price << "\t| "
+                         << inventory[i].quantity << endl;
+                }
+                cout << "=================================================================" << endl;
+                break;
+            }
+            case 5: {
+                cout << "\\nExiting CMP n010 Inventory. Study hard for final exams!" << endl;
+                break;
+            }
+            default: {
+                cout << "[Error] Choice out of bounds (1-5 only). Try again." << endl;
+            }
+        }
+    } while (choice != 5);
+
+    return 0;
+}`
+      }
+    ]
+  },
+  {
     id: "2022-2023-fall",
     year: "2022-2023",
     semester: "Fall",
