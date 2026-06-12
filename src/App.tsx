@@ -54,8 +54,8 @@ function AppContent() {
               <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
                 C++ <span className="text-blue-600 dark:text-blue-400">Reference</span>
               </h1>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                Modern Academy
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                By Muhammad Mahran
               </p>
             </div>
             <button 
@@ -98,11 +98,22 @@ function AppContent() {
             <NavItem onClick={() => setSidebarOpen(false)} to="/number-systems" icon={<Binary size={18} />} label="Number Systems" />
           </div>
           
-          <div className="px-6 mt-auto pt-4 pb-4 border-t border-slate-100 dark:border-slate-800">
-            <div className="text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500 mb-1">v1.2.0</div>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-              by <span className="font-bold text-slate-800 dark:text-slate-300">Muhammad Mahran</span>
-            </p>
+          <div className="px-6 mt-auto pt-4 pb-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <a 
+              href="https://discord.com/invite/kyfDh68RCh" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.317 4.37a19.792 19.792 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.579.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 006.012 3.033.078.078 0 00.085-.027c.46-.63.882-1.296 1.25-1.997a.077.077 0 00-.041-.107 12.31 12.31 0 01-1.78-.853.077.077 0 01-.008-.128c.115-.085.23-.174.343-.264a.078.078 0 01.084-.006 14.076 14.076 0 006.516 0 .078.078 0 01.084.006c.114.09.229.179.344.264a.077.077 0 01-.008.128 12.186 12.186 0 01-1.78.853.076.076 0 00-.04.107c.368.701.79 1.367 1.25 1.997a.078.078 0 00.085.027 19.845 19.845 0 006.012-3.033.08.08 0 00.031-.057c.484-5.111-.328-9.644-3.585-14.321a.07.07 0 00-.032-.027zM8.25 14.86c-1.07 0-1.954-.98-1.954-2.186 0-1.205.884-2.186 1.954-2.186 1.07 0 1.954.98 1.954 2.186 0 1.205-.884 2.186-1.954 2.186zm7.5 0c-1.07 0-1.954-.98-1.954-2.186 0-1.205.884-2.186 1.954-2.186 1.07 0 1.954.98 1.954 2.186 0 1.205-.884 2.186-1.954 2.186z" />
+              </svg>
+              Join Modern Academy’s Server
+            </a>
+            <div className="flex items-center justify-between text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500">
+               <span>v1.2.0</span>
+               <span>Modern Academy</span>
+            </div>
           </div>
         </nav>
 
