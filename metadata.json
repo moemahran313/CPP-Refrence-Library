@@ -1,0 +1,6 @@
+{
+  "name": "C++ Reference Library",
+  "description": "Modern Academy for Engineering C++ Curriculum reference including flashcards, MCQ analyzer, video lectures, and numbering systems tricks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
