@@ -80,7 +80,12 @@ function AppContent() {
               <span className="px-4 text-[10px] font-bold tracking-widest uppercase text-slate-600 dark:text-slate-500">Interactive Labs</span>
             </div>
             
-            <NavItem onClick={() => setSidebarOpen(false)} to="/playground" icon={<Terminal size={18} />} label="C++ Compiler Sandbox" />
+            <NavItem onClick={() => setSidebarOpen(false)} to="/playground" icon={<Terminal size={18} />} label={
+              <div className="flex items-center justify-between w-full">
+                <span>C++ Compiler Sandbox</span>
+                <span className="text-[8px] px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded font-black uppercase tracking-tighter">Live</span>
+              </div>
+            } />
             <NavItem onClick={() => setSidebarOpen(false)} to="/exams" icon={<GraduationCap size={18} />} label="Final Exams Prep" />
             
             <div className="pt-4 pb-2">
@@ -118,11 +123,11 @@ function AppContent() {
             </div>
             
             {/* Global Search Component */}
-            <div className="flex-1 max-w-2xl ml-auto md:mx-auto relative">
+            <div className="flex-1 max-w-2xl ml-auto md:mx-auto relative px-2">
               <GlobalSearch />
             </div>
             
-            <div className="hidden md:flex ml-4 w-12 items-center justify-end">
+            <div className="flex ml-2 md:ml-4 w-12 items-center justify-end">
                <ThemeToggle />
             </div> 
           </header>
@@ -155,7 +160,7 @@ export default function App() {
   );
 }
 
-function NavItem({ to, icon, label, onClick }: { to: string; icon: React.ReactNode; label: string; onClick?: () => void }) {
+function NavItem({ to, icon, label, onClick }: { to: string; icon: React.ReactNode; label: React.ReactNode; onClick?: () => void }) {
   return (
     <NavLink
       to={to}

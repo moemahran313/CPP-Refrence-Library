@@ -36,7 +36,7 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
     } catch (error: any) {
       lastError = error;
       const errorMsg = error?.message || "";
-      console.error(`[Gemini Sandbox Error] Attempt ${attempt} failed with:`, errorMsg);
+      console.error(`[Gemini Sandbox Error] Attempt ${attempt} failed:`, errorMsg);
       
       const isUnavailableOrRateLimited = 
         errorMsg.includes("503") || 
@@ -53,13 +53,10 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
       // Rotate models to bypass quota limits or transient unavailability immediately on retry!
       if (isUnavailableOrRateLimited && attempt < maxRetries) {
         if (payload.model === "gemini-flash-latest") {
-          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on gemini-flash-latest. Switching to gemini-3.1-flash-lite...`);
+          console.warn(`[Gemini Sandbox Fallback] Switching to gemini-3.1-flash-lite...`);
           payload.model = "gemini-3.1-flash-lite";
-        } else if (payload.model === "gemini-3.1-flash-lite") {
-          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on gemini-3.1-flash-lite. Switching to gemini-1.5-flash...`);
-          payload.model = "gemini-1.5-flash"; 
         } else {
-          console.warn(`[Gemini Sandbox Fallback] Rate limit or high volume on ${payload.model}. Switching to gemini-flash-latest...`);
+          console.warn(`[Gemini Sandbox Fallback] Resetting to gemini-flash-latest...`);
           payload.model = "gemini-flash-latest";
         }
       }
@@ -82,6 +79,12 @@ async function generateWithRetry(client: GoogleGenAI, payload: any, maxRetries =
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  // Global request logger for debugging
+  app.use((req, res, next) => {
+    console.log(`[Server] ${req.method} ${req.url}`);
+    next();
+  });
 
   // Middleware to parse json requests
   app.use(express.json());

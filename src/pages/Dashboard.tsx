@@ -161,10 +161,19 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-10">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="p-6 md:p-10 max-w-7xl mx-auto space-y-10"
+    >
       
       {/* Dynamic Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+      <motion.div 
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1 }}
+        className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2 border-b border-slate-200 dark:border-slate-800"
+      >
         <div>
           <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 font-mono">Modern Academy Hub</span>
           <h1 className="text-2xl sm:text-3xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mt-1">C++ Reference Hub</h1>
@@ -179,18 +188,33 @@ export default function Dashboard() {
             <div className="text-sm font-black text-indigo-900 dark:text-indigo-200">100% Real Course Materials</div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Dynamic Integrity Counter Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.05, delayChildren: 0.2 }
+          }
+        }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         {[
           { label: "Syllabus Sections", value: totalSections, phrase: `${totalTopics} Core Chapters`, icon: BookOpen, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/20", border: "border-purple-100 dark:border-purple-900/30" },
           { label: "Compiler Presets", value: sandboxPresets.length, phrase: "Syntactical Code Blocks", icon: Terminal, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/20", border: "border-blue-100 dark:border-blue-900/30" },
           { label: "Tricky MCQ Bank", value: totalMCQs, phrase: "Instant Scoring & Reset", icon: HelpCircle, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-950/20", border: "border-amber-100 dark:border-amber-900/30" },
           { label: "Past Exam Papers", value: totalExams, phrase: "With Official Solutions", icon: GraduationCap, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/20", border: "border-emerald-100 dark:border-emerald-900/30" },
         ].map((stat, i) => (
-          <div 
+          <motion.div 
             key={i}
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              visible: { opacity: 1, y: 0 }
+            }}
             className={`p-5 bg-white dark:bg-slate-900 border ${stat.border} rounded-2xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow`}
           >
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${stat.bg} ${stat.color}`}>
@@ -201,12 +225,17 @@ export default function Dashboard() {
               <div className="text-2xl font-black text-slate-900 dark:text-white leading-none mt-1">{stat.value}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono">{stat.phrase}</div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Bento-style Grid of Actual Library Tools */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6"
+      >
         
         {/* Card 1: C++ Compiler Sandbox Preset Launcher (3 Cols Wide) */}
         <div className="md:col-span-2 lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-slate-350 dark:hover:border-slate-700 transition-colors">
@@ -535,7 +564,7 @@ export default function Dashboard() {
           </button>
         </div>
 
-      </div>
+      </motion.div>
 
       {/* Glossary & Video Lesson Spotlight Footer Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
@@ -645,6 +674,6 @@ export default function Dashboard() {
 
       </div>
 
-    </div>
+    </motion.div>
   );
 }
