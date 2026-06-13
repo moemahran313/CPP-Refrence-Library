@@ -6,6 +6,7 @@ import 'prismjs/components/prism-cpp';
 import 'prismjs/themes/prism-tomorrow.css';
 import { Terminal, Play, RotateCcw, HelpCircle, FileCode, CheckCircle, AlertTriangle, XCircle, Info, Keyboard } from 'lucide-react';
 import { motion } from 'motion/react';
+import { CppInterpreter } from '../lib/cppInterpreter';
 
 // Code Templates for quick playground loads
 interface CodeTemplate {
@@ -409,68 +410,34 @@ export default function Playground() {
       setIsProgramSuspended(false);
     }
 
-    const stdinString = inputsList.join("\n");
-
     try {
-      const response = await fetch("/api/simulate-cpp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: currentCode, stdin: stdinString }),
-      });
-
-      const contentType = response.headers.get("content-type");
-      const isJson = contentType && contentType.includes("application/json");
-
-      if (!response.ok) {
-        if (isJson) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || errorData.error || "Failed to contact compilation endpoint.");
-        } else {
-          const text = await response.text();
-          throw new Error(`Server Error (${response.status}): ${text.substring(0, 100)}${text.length > 100 ? '...' : ''}`);
+      const interpreter = new CppInterpreter();
+      const result = await interpreter.execute(
+        currentCode,
+        inputsList,
+        (currentBuffer) => {
+          setTerminalOutput(currentBuffer);
+        },
+        (suspendedState) => {
+          setIsProgramSuspended(suspendedState);
         }
-      }
+      );
 
-      if (!isJson) {
-        const text = await response.text();
-        throw new Error(`Unexpected non-JSON response: ${text.substring(0, 100)}...`);
-      }
+      setStatus(result.status);
+      setExitCode(result.exitCode);
+      setDiagnostics(result.diagnostics);
 
-      const data = await response.json();
-      let output = data.terminalOutput || "";
-      let diagnosticsStr = data.diagnostics || "";
-      const incomingStatus = data.status || "SUCCESS";
-      const incomingExitCode = data.exitCode || "0";
-
-      const suspensionTag = "[ERR: Program suspended - Awaiting user input]";
-      const hasSuspension = output.includes(suspensionTag) || 
-                            diagnosticsStr.includes(suspensionTag) || 
-                            incomingStatus === "SUSPENDED" ||
-                            (data.raw && data.raw.includes(suspensionTag));
-
-      if (hasSuspension) {
-        // Strip the suspension flag from terminal output and diagnostics so it remains clean
-        output = output.replace(suspensionTag, "").trim();
-        diagnosticsStr = diagnosticsStr.replace(suspensionTag, "").trim();
-        
-        setTerminalOutput(output);
+      if (result.status === "SUSPENDED") {
         setIsProgramSuspended(true);
-        setStatus("SUSPENDED");
-        setExitCode("0");
-        setDiagnostics(""); // Clear diagnostics so no scary error panel displays on warning
       } else {
-        setTerminalOutput(output);
         setIsProgramSuspended(false);
-        setStatus(incomingStatus);
-        setExitCode(incomingExitCode);
-        setDiagnostics(diagnosticsStr);
       }
 
     } catch (err: any) {
       console.error(err);
       setStatus("COMPILATION_FAILED");
-      setErrorDetails(err.message || "Something went wrong. Please check your network connection.");
-      setDiagnostics(`Internal Error: Failed to complete pipeline run.\n${err.message || ""}`);
+      setErrorDetails(err.message || "Something went wrong during simulation.");
+      setDiagnostics(`Internal Error: Failed to complete simulation execution.\n${err.message || ""}`);
     } finally {
       setLoading(false);
       // Auto focus the input after rendering the suspension point

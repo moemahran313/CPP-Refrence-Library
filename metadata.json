@@ -1,6 +1,6 @@
 {
   "name": "C++ Reference Library",
-  "description": "Modern Academy for Engineering C++ Curriculum reference including flashcards, MCQ analyzer, video lectures, and numbering systems tricks.",
+  "description": "Comprehensive C++ curriculum reference for Modern Academy featuring interactive labs, a high-fidelity C++ compiler sandbox, and integrated programming playgrounds.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
