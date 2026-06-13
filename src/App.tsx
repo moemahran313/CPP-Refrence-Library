@@ -32,7 +32,7 @@ function AppContent() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 flex flex-col md:flex-row text-slate-900 dark:text-slate-50 font-sans">
+      <div className="h-screen overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-200 flex flex-col md:flex-row text-slate-900 dark:text-slate-50 font-sans">
         {/* Sidebar Overlay (Mobile) */}
         {sidebarOpen && (
           <div 
@@ -118,7 +118,7 @@ function AppContent() {
         </nav>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <div className="flex-1 flex flex-col h-full overflow-hidden w-full relative">
           {/* Header */}
           <header className="h-16 md:h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-8 z-30 shrink-0 shadow-sm relative transition-colors duration-200">
             <div className="flex items-center gap-3">
