@@ -104,8 +104,17 @@ export default function Curriculum() {
                       <div className="max-w-none text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
                         <MarkdownRenderer content={section.content} />
                         {section.image && (
-                          <div className="mt-8">
-                             <img src={section.image} alt={section.title} className="w-full rounded-2xl shadow-md" />
+                          <div className="mt-8 group cursor-zoom-in">
+                             <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white p-1">
+                               <img 
+                                 src={section.image} 
+                                 alt={section.title} 
+                                 className="w-full h-auto rounded-xl transition-transform duration-500 group-hover:scale-[1.02]" 
+                               />
+                             </div>
+                             <p className="mt-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 text-center">
+                               Interactive Diagram: {section.title}
+                             </p>
                           </div>
                         )}
                       </div>
