@@ -39,34 +39,39 @@ export class CppInterpreter {
     js = js.replace(/\/\*[\s\S]*?\*\//g, ""); // Multi-line comments
     js = js.replace(/\/\/.*/g, ""); // Single-line comments
 
-    // 2. Remove preprocessor directives and namespace definitions
+    // 2. Hide strings to prevent transpiler from touching them
+    const strings: string[] = [];
+    js = js.replace(/"([^"\\]|\\.)*"/g, (match) => {
+      strings.push(match);
+      return `__STR_PLACEHOLDER_${strings.length - 1}__`;
+    });
+
+    // 3. Remove preprocessor directives and namespace definitions
     js = js.replace(/#include\s*[<"].*?[>"]/g, "");
     js = js.replace(/using\s+namespace\s+\w+\s*;/g, "");
-    js = js.replace(/\bstd\s*::\s*/g, ""); // Remove std:: prefixes which cause syntax errors in JS
+    js = js.replace(/\bstd\s*::\s*/g, ""); // Remove std:: prefixes
 
-    // 3. Normalize whitespace slightly but preserve line structure
+    // 4. Normalize whitespace slightly
     js = js.trim();
 
-    // 4. Custom helper to parse and translate structs and classes
+    // 5. Custom helper to parse and translate structs and classes
     js = this.transpileClassesAndStructs(js);
 
-    // 5. Transpile standard functions and variable types
+    // 6. Transpile standard functions and variable types
     js = this.transpileFunctionsAndScopes(js);
 
-    // 6. Replace C++ standard library features:
-    // Translate standard cout:
-    // e.g. "cout << ... << endl;" -> "await __cout(...);"
+    // 7. Replace C++ standard library features
     js = this.transpileCoutStreams(js);
-
-    // Translate standard cin and getline:
-    // e.g. "cin >> x;" -> "x = await __cin();"
-    // e.g. "getline(cin, name);" -> "name = await __getline();"
     js = this.transpileCinStreams(js);
 
-    // 7. Replace type definitions (int, double, char, string, etc.)
+    // 8. Replace type definitions (int, double, char, string, etc.)
     js = this.transpileTypes(js);
 
-    // 8. Wrap everything in a sandboxed async context
+    // 9. Restore strings
+    js = js.replace(/__STR_PLACEHOLDER_(\d+)__/g, (match, index) => {
+      return strings[parseInt(index, 10)];
+    });
+
     return js;
   }
 
@@ -85,7 +90,12 @@ export class CppInterpreter {
       // 1. Extract methods first to avoid splitting their bodies
       const methodRegex = /(\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{([\s\S]*?)\}/g;
       let bodyWithoutMethods = body.replace(methodRegex, (m, retType, mName, mParams, mBody) => {
-        methods.push(`async ${mName}(${mParams}) { ${mBody} }`);
+        // We need to transpile the body of the method too
+        let transpiledBody = mBody;
+        transpiledBody = this.transpileCoutStreams(transpiledBody);
+        transpiledBody = this.transpileCinStreams(transpiledBody);
+        transpiledBody = this.transpileTypes(transpiledBody);
+        methods.push(`async ${mName}(${mParams}) { ${transpiledBody} }`);
         return ""; // placeholder to remove from body
       });
 
