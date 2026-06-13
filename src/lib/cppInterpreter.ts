@@ -23,6 +23,7 @@ export interface SimulationResult {
 export class CppInterpreter {
   private outputBuffer: string = "";
   private stdinQueue: string[] = [];
+  private stdinTokens: string[] = [];
   private onInputRequired: (() => void) | null = null;
   private isSuspended: boolean = false;
   private inputResolver: ((value: string) => void) | null = null;
@@ -321,23 +322,32 @@ export class CppInterpreter {
     };
 
     const __cin = async (): Promise<any> => {
-      if (this.stdinQueue.length > 0) {
-        const val = this.stdinQueue.shift()!;
-        this.outputBuffer += val + "\n";
-        onWrite(this.outputBuffer);
-        return isNaN(Number(val)) ? val : Number(val);
-      } else {
-        // Suspend simulation
-        this.isSuspended = true;
-        onSuspendStatus(true);
-        return new Promise((resolve) => {
-          this.inputResolver = (val: string) => {
-            this.isSuspended = false;
-            onSuspendStatus(false);
-            resolve(isNaN(Number(val)) ? val : Number(val));
-          };
-        });
+      // If we have tokens already, return the first one
+      if (this.stdinTokens.length > 0) {
+        return this.stdinTokens.shift();
       }
+
+      // If we have lines in the queue but no tokens, tokenize the next line
+      if (this.stdinQueue.length > 0) {
+        const line = this.stdinQueue.shift()!;
+        this.stdinTokens = line.trim().split(/\s+/);
+        this.outputBuffer += line + "\n";
+        onWrite(this.outputBuffer);
+        return this.stdinTokens.shift();
+      }
+
+      // Otherwise, suspend and wait for input
+      this.isSuspended = true;
+      onSuspendStatus(true);
+      return new Promise((resolve) => {
+        this.inputResolver = (line: string) => {
+          this.isSuspended = false;
+          onSuspendStatus(false);
+          this.stdinTokens = line.trim().split(/\s+/);
+          const firstToken = this.stdinTokens.shift();
+          resolve(firstToken);
+        };
+      });
     };
 
     const __getline = async (): Promise<string> => {
@@ -441,6 +451,9 @@ export class CppInterpreter {
       const resolver = this.inputResolver;
       this.inputResolver = null;
       resolver(inputLine);
+    } else {
+      // If not suspended, queue it for future cin calls
+      this.stdinQueue.push(inputLine);
     }
   }
 }

@@ -382,6 +382,8 @@ export default function Playground() {
   const [accumulatedInputs, setAccumulatedInputs] = useState<string[]>([]);
   const [currentInputLine, setCurrentInputLine] = useState("");
   const [isProgramSuspended, setIsProgramSuspended] = useState(false);
+  const interpreterRef = React.useRef<CppInterpreter | null>(null);
+  const isExecutingRef = React.useRef<boolean>(false);
 
   const terminalInputRef = React.useRef<HTMLInputElement>(null);
   const consoleEndRef = React.useRef<HTMLDivElement>(null);
@@ -399,19 +401,23 @@ export default function Playground() {
   }, [terminalOutput, isProgramSuspended, loading]);
 
   const handleRun = async (currentCode = code, inputsList: string[] = []) => {
+    // Prevent overlapping executions: If user clicks Run while already running, we start fresh.
+    // However, if we're suspended, we might want to allow this to restart the program.
     setLoading(true);
     setStatus("IDLE");
     setDiagnostics("");
     setErrorDetails("");
+    setIsProgramSuspended(false);
 
     if (inputsList.length === 0) {
       setTerminalOutput("");
       setAccumulatedInputs([]);
-      setIsProgramSuspended(false);
     }
 
     try {
       const interpreter = new CppInterpreter();
+      interpreterRef.current = interpreter;
+      
       const result = await interpreter.execute(
         currentCode,
         inputsList,
@@ -420,18 +426,19 @@ export default function Playground() {
         },
         (suspendedState) => {
           setIsProgramSuspended(suspendedState);
+          // Crucial: Allow input to be processed by dropping loading state when suspended
+          if (suspendedState) {
+            setLoading(false);
+          } else {
+            setLoading(true);
+          }
         }
       );
 
       setStatus(result.status);
       setExitCode(result.exitCode);
       setDiagnostics(result.diagnostics);
-
-      if (result.status === "SUSPENDED") {
-        setIsProgramSuspended(true);
-      } else {
-        setIsProgramSuspended(false);
-      }
+      setIsProgramSuspended(result.status === "SUSPENDED");
 
     } catch (err: any) {
       console.error(err);
@@ -493,19 +500,26 @@ export default function Playground() {
   const handleTerminalKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (loading) return;
+      // Only block if we're truly busy (not just suspended)
+      if (loading && !isProgramSuspended) return;
 
       const trimmedValue = currentInputLine;
       setCurrentInputLine("");
 
-      // Immediately append the typed value to the local output buffer for instant visual echo
+      // Visual echo
       setTerminalOutput(prev => prev + trimmedValue + "\n");
 
-      // Save to client context and re-submit running state
-      const updatedList = [...accumulatedInputs, trimmedValue];
-      setAccumulatedInputs(updatedList);
-      
-      handleRun(code, updatedList);
+      if (isProgramSuspended && interpreterRef.current) {
+        // True Resume: Feed the value into the active promise
+        interpreterRef.current.resume(trimmedValue);
+        // We also update the history for re-runs
+        setAccumulatedInputs(prev => [...prev, trimmedValue]);
+      } else {
+        // Fallback: Start a new run with the new input included
+        const updatedList = [...accumulatedInputs, trimmedValue];
+        setAccumulatedInputs(updatedList);
+        handleRun(code, updatedList);
+      }
     }
   };
 
@@ -674,8 +688,9 @@ export default function Playground() {
                   {terminalOutput}
                   
                   {/* Inline interactive input field */}
-                  {isProgramSuspended && (
-                    <span className="inline-flex items-center ml-1">
+                  {(!loading || isProgramSuspended) && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-emerald-400 font-bold">{">"}</span>
                       <input
                         id="interactive-terminal-input"
                         ref={terminalInputRef}
@@ -683,21 +698,36 @@ export default function Playground() {
                         value={currentInputLine}
                         onChange={(e) => setCurrentInputLine(e.target.value)}
                         onKeyDown={handleTerminalKeyDown}
-                        disabled={loading}
-                        className="bg-transparent text-emerald-400 font-mono text-xs outline-none border-0 p-0 m-0 caret-emerald-400 focus:ring-0 w-36"
+                        disabled={loading && !isProgramSuspended}
+                        className="bg-transparent text-emerald-400 font-mono text-xs outline-none border-0 p-0 m-0 caret-emerald-400 focus:ring-0 flex-1"
                         autoFocus
-                        placeholder="Type input & enter"
+                        placeholder={isProgramSuspended ? "Enter program input..." : "Type here to run with input..."}
                       />
-                      {loading && (
-                        <span className="text-slate-500 text-[10px] ml-2 animate-pulse">(computing next frame...)</span>
+                      {loading && isProgramSuspended && (
+                        <span className="text-slate-500 text-[10px] ml-2 animate-pulse">(processing...)</span>
                       )}
-                    </span>
+                    </div>
                   )}
                 </div>
-              ) : status === "COMPILATION_FAILED" ? (
-                <div className="text-rose-400 italic">No output produced due to compiler failure (check logs below).</div>
+              ) : (!loading || isProgramSuspended) ? (
+                <div className="flex items-center gap-2">
+                   <span className="text-emerald-400 font-bold">{">"}</span>
+                    <input
+                      id="interactive-terminal-idle-input"
+                      ref={terminalInputRef}
+                      type="text"
+                      value={currentInputLine}
+                      onChange={(e) => setCurrentInputLine(e.target.value)}
+                      onKeyDown={handleTerminalKeyDown}
+                      className="bg-transparent text-emerald-400 font-mono text-xs outline-none border-0 p-0 m-0 caret-emerald-400 focus:ring-0 flex-1"
+                      autoFocus
+                      placeholder="Type input here or click 'Run Code' above..."
+                    />
+                </div>
               ) : (
-                <div className="text-slate-600 italic">Terminal is idle. Click 'Run Code' above to compile and view stdout.</div>
+                <div className="flex items-center justify-center h-full text-slate-500 gap-2 font-sans py-12">
+                   <span className="inline-block animate-pulse">Compiling source code in sandbox environment...</span>
+                </div>
               )}
               <div ref={consoleEndRef} />
             </div>
