@@ -177,7 +177,7 @@ export default function FunctionsArrays() {
             <Terminal size={20} />
             <h3 className="font-bold uppercase tracking-widest text-xs">Library Modules</h3>
           </div>
-          <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight">Mastering<br/>Functions & Arrays</h2>
+          <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight">C++<br/>Examples</h2>
         </div>
 
         <div className="space-y-1">
@@ -354,7 +354,7 @@ export default function FunctionsArrays() {
         ) : (
           <div className="flex-1 min-h-[600px] pb-8">
              <div className="mb-6">
-                <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Interactive Playground</h1>
+                <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Code Playground</h1>
                 <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">Write and test your C++ snippets. Start typing below.</p>
              </div>
              <div className="h-[calc(100%-6rem)]">

@@ -74,7 +74,7 @@ function AppContent() {
             </div>
 
             <NavItem onClick={() => setSidebarOpen(false)} to="/curriculum" icon={<Map size={18} />} label="Curriculum" />
-            <NavItem onClick={() => setSidebarOpen(false)} to="/functions" icon={<CodeSquare size={18} />} label="Functions & Arrays" />
+            <NavItem onClick={() => setSidebarOpen(false)} to="/functions" icon={<CodeSquare size={18} />} label="Examples" />
 
             <div className="pt-4 pb-2">
               <span className="px-4 text-[10px] font-bold tracking-widest uppercase text-slate-600 dark:text-slate-500">Interactive Labs</span>
